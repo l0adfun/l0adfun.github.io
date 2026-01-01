@@ -1,138 +1,40 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>l0adfun - GitHub Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        body {font-family:'Roboto',sans-serif;margin:0;background-color:#0d1117;color:#c9d1d9;overflow-y:scroll;transition: background 0.3s,color 0.3s}
-        body.light {background-color:#f5f5f5;color:#121212}
-        ::-webkit-scrollbar {width:10px}
-        ::-webkit-scrollbar-track {background:#161b22}
-        ::-webkit-scrollbar-thumb {background-color:#58a6ff;border-radius:10px;border:2px solid #161b22}
-        header {background-color:#161b22;padding:30px 20px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,0.5);transition: background 0.3s}
-        header.light {background-color:#e0e0e0}
-        header h1 {margin:0;color:#58a6ff;font-size:2.5em}
-        main {padding:30px 20px;max-width:1200px;margin:auto;display:flex;flex-direction:column;gap:50px}
-        .profile-section {display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
-        .profile-left {flex:1;min-width:250px;text-align:center}
-        .profile-left img {border-radius:50%;width:200px;height:200px;object-fit:cover;margin-bottom:15px}
-        .profile-right {flex:2;min-width:300px}
-        h2 {color:#58a6ff;border-bottom:2px solid #30363d;padding-bottom:8px;font-size:1.8em;margin-bottom:20px}
-        h2.light {color:#0d47a1;border-bottom:2px solid #b0bec5}
-        #about {white-space:pre-wrap} 
-        .repo-list {display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:0;list-style:none}
-        .repo-list li {background-color:#161b22;border-radius:12px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.5);transition: transform 0.3s, background 0.3s}
-        .repo-list li:hover {background-color:#21262d;transform:translateY(-5px)}
-        .repo-img {width:100%;height:150px;object-fit:cover;background-color:#0d1117}
-        .repo-content {padding:15px;color:#fff}
-        .repo-content a {color:#58a6ff;text-decoration:none;font-weight:600;font-size:1.2em}
-        .repo-content p {margin:10px 0;font-size:0.95em;min-height:40px}
-        .repo-stats {display:flex;gap:15px;font-size:0.9em;color:#8b949e}
-        .repo-stats i {color:#f0c674}
-        footer {text-align:center;padding:25px;background-color:#161b22;color:#8b949e;border-top:1px solid #30363d;transition: background 0.3s,color 0.3s}
-        footer.light {background-color:#e0e0e0;color:#121212}
-        .theme-toggle {position:fixed;top:20px;right:20px;background:#58a6ff;color:#fff;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;z-index:1000;font-size:1.2em}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>l0adFun</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>
 </head>
-<body>
-    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-    <header>
-        <h1><i class="fab fa-github"></i> l0adfun</h1>
-    </header>
-
-    <main>
-        <section id="profile">
-            <div class="profile-section">
-                <div class="profile-left">
-                    <img id="profileAvatar" src="" alt="Profile Image">
-                </div>
-                <div class="profile-right">
-                    <h2>About Me</h2>
-                    <div id="aboutContent">Loading...</div>
-                    <ul id="profileDetails"></ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="repos">
-            <ul class="repo-list" id="repoList">
-                <li>Loading repositories...</li>
-            </ul>
-        </section>
-    </main>
-
-    <footer>
-        &copy; 2026 <a href="https://github.com/l0adfun" target="_blank" style="color:#58a6ff;text-decoration:none;">l0adfun</a>
-    </footer>
-
-    <script>
-        let isLight=false;
-        function toggleTheme(){
-            document.body.classList.toggle('light');
-            document.querySelector('header').classList.toggle('light');
-            document.querySelector('footer').classList.toggle('light');
-            document.querySelectorAll('h2').forEach(h=>h.classList.toggle('light'));
-            isLight=!isLight;
-        }
-
-        async function fetchProfile(){
-            const username='l0adfun';
-            try{
-                const res=await fetch(`https://api.github.com/users/${username}`);
-                const data=await res.json();
-                document.getElementById('profileAvatar').src=data.avatar_url;
-                const mdContent=`# ${data.name || username}\n\n${data.bio || 'No bio provided.'}`;
-                document.getElementById('aboutContent').innerHTML=marked.parse(mdContent);
-                const detailsList=document.getElementById('profileDetails');
-                detailsList.innerHTML=`
-                    <li><i class='fas fa-users'></i> Followers: ${data.followers}</li>
-                    <li><i class='fas fa-user-friends'></i> Following: ${data.following}</li>
-                    <li><i class='fas fa-book'></i> Public Repos: ${data.public_repos}</li>
-                    <li><i class='fas fa-building'></i> Company: ${data.company || 'N/A'}</li>
-                    <li><i class='fas fa-map-marker-alt'></i> Location: ${data.location || 'N/A'}</li>
-                    <li><i class='fas fa-link'></i> Blog: <a href='${data.blog}' target='_blank'>${data.blog || 'N/A'}</a></li>
-                    <li><i class='fas fa-envelope'></i> Email: ${data.email || 'N/A'}</li>
-                `;
-            }catch(err){
-                document.getElementById('aboutContent').innerText='Error loading profile.';
-                console.error(err);
-            }
-        }
-
-        async function fetchRepos(){
-            const username='l0adfun';
-            const repoList=document.getElementById('repoList');
-            try{
-                const res=await fetch(`https://api.github.com/users/${username}/repos`);
-                const repos=await res.json();
-                repoList.innerHTML='';
-                repos.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
-                repos.forEach(repo=>{
-                    const li=document.createElement('li');
-                    const imgURL=`https://opengraph.githubassets.com/1/${username}/${repo.name}`;
-                    li.innerHTML=`<img class='repo-img' src='${imgURL}' alt='${repo.name} cover image'>
-                        <div class='repo-content'>
-                        <a href='${repo.html_url}' target='_blank'>${repo.name}</a>
-                        <p>${repo.description||'No description'}</p>
-                        <div class='repo-stats'>
-                        <span><i class='fas fa-star'></i> ${repo.stargazers_count}</span>
-                        <span><i class='fas fa-code-branch'></i> ${repo.forks_count}</span>
-                        <span><i class='fas fa-exclamation-circle'></i> ${repo.open_issues_count}</span>
-                        </div></div>`;
-                    repoList.appendChild(li);
-                });
-            }catch(err){
-                repoList.innerHTML='<li>Error fetching repositories.</li>';
-                console.error(err);
-            }
-        }
-
-        fetchProfile();
-        fetchRepos();
-    </script>
+<body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+<iframe src="https://githubcard.com/l0adfun.svg?d=-JS637A8" scrolling="no"></iframe>
 </body>
 </html>
