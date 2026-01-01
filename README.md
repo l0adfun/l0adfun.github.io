@@ -6,4 +6,4 @@
 
 ![Image](https://github.com/user-attachments/assets/a481e197-2dc2-4c6c-8662-f3a22858ccee)
 
-[![Made With Me](https://img.shields.io/badge/Made%20With-GitHubCard-blue?style=for-the-badge&logo=github)](https://l0adfun.github.io)
+[![Made With Me](https://img.shields.io/badge/Made%20With-Me-blue?style=for-the-badge&logo=github)](https://l0adfun.github.io)
