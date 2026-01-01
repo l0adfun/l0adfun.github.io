@@ -1,4 +1,4 @@
-# L0adFun GitHub Card
+# l0adfun GitHub Card
 
 ![l0adFun GitHub Card](https://githubcard.com/l0adfun.svg?d=-JS637A8)
 
