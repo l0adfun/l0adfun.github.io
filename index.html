@@ -1,42 +1,686 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>l0adfun</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    user-select: none;
-  }
-
-  body {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-  }
-
-  iframe {
-    border: none;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>l0adfun - GitHub Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .repo-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .language-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #1a1a1a;
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #000000;
+        }
+        
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #1a1a1a #f1f1f1;
+        }
+    </style>
 </head>
-<body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
-<iframe src="https://githubcard.com/l0adfun.svg?d=-JS637A8" scrolling="no"></iframe>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2127935519355421"
-    crossorigin="anonymous"></script>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Hero Section -->
+    <div class="gradient-bg text-white py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center" id="hero-content">
+                <div class="mb-6">
+                    <img id="avatar" src="" alt="Profile" class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-2xl skeleton">
+                </div>
+                <h1 id="name" class="text-5xl font-bold mb-3"></h1>
+                <p id="bio" class="text-xl mb-6 max-w-2xl mx-auto opacity-90"></p>
+                <div class="flex justify-center gap-4 mb-6">
+                    <a id="profile-link" href="#" target="_blank" class="bg-white text-black px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition">
+                        <i class="fab fa-github mr-2"></i>View GitHub Profile
+                    </a>
+                </div>
+                <div class="flex justify-center gap-6 text-sm flex-wrap" id="user-stats">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="location"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-users"></i>
+                        <span id="followers"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-code-branch"></i>
+                        <span id="repos-count"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="max-w-6xl mx-auto px-4 -mt-10 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="stats-grid">
+            <div class="stat-card rounded-xl p-6 shadow-lg card-hover opacity-0">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Total Stars</p>
+                        <p id="total-stars" class="text-3xl font-bold text-black mt-1">0</p>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <i class="fas fa-star text-black text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card rounded-xl p-6 shadow-lg card-hover opacity-0">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Total Forks</p>
+                        <p id="total-forks" class="text-3xl font-bold text-black mt-1">0</p>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <i class="fas fa-code-branch text-black text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card rounded-xl p-6 shadow-lg card-hover opacity-0">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Public Repos</p>
+                        <p id="public-repos" class="text-3xl font-bold text-black mt-1">0</p>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <i class="fas fa-folder text-black text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card rounded-xl p-6 shadow-lg card-hover opacity-0">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm font-medium">Followers</p>
+                        <p id="followers-stat" class="text-3xl font-bold text-black mt-1">0</p>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <i class="fas fa-heart text-black text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="max-w-6xl mx-auto px-4 mb-8">
+        <div class="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <input type="text" id="search-input" placeholder="Search repositories..." 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black">
+                </div>
+                <select id="sort-select" class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black">
+                    <option value="updated">Recently Updated</option>
+                    <option value="stars">Most Stars</option>
+                    <option value="forks">Most Forks</option>
+                    <option value="name">Name (A-Z)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repositories Section -->
+    <div class="max-w-6xl mx-auto px-4 pb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-code mr-2 text-black"></i>Featured Repositories
+        </h2>
+        <div id="repos-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Loading skeletons -->
+            <div class="repo-card rounded-xl p-6 shadow-lg skeleton h-48"></div>
+            <div class="repo-card rounded-xl p-6 shadow-lg skeleton h-48"></div>
+            <div class="repo-card rounded-xl p-6 shadow-lg skeleton h-48"></div>
+            <div class="repo-card rounded-xl p-6 shadow-lg skeleton h-48"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400">Made by <a href="https://github.com/l0adfun" target="_blank" class="text-red-500 hover:text-red-600 font-semibold transition">l0adfun</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const USERNAME = 'torvalds'; // Change this to your GitHub username
+        let allRepos = [];
+        
+        const languageColors = {
+            'ABAP': '#E8274B',
+            'AGS Script': '#B9D9FF',
+            'AMPL': '#E6EFBB',
+            'ANTLR': '#9DC3FF',
+            'API Blueprint': '#2ACCA8',
+            'APL': '#5A8164',
+            'ASP': '#6a40fd',
+            'ATS': '#1ac620',
+            'ActionScript': '#882B0F',
+            'Ada': '#02f88c',
+            'Agda': '#315665',
+            'Alloy': '#64C800',
+            'AngelScript': '#C7D7DC',
+            'ApacheConf': '#d12127',
+            'Apex': '#1797c0',
+            'Apollo Guidance Computer': '#0B3D91',
+            'AppleScript': '#101F1F',
+            'Arc': '#aa2afe',
+            'Arduino': '#bd79d1',
+            'AspectJ': '#a957b0',
+            'Assembly': '#6E4C13',
+            'Asymptote': '#4a0c0c',
+            'AutoHotkey': '#6594b9',
+            'AutoIt': '#1C3552',
+            'Ballerina': '#FF5000',
+            'Batchfile': '#C1F12E',
+            'BlitzMax': '#cd6400',
+            'Boo': '#d4bec1',
+            'Brainfuck': '#2F2530',
+            'C': '#555555',
+            'C#': '#178600',
+            'C++': '#f34b7d',
+            'CAP CDS': '#0092d1',
+            'COBOL': '#000000',
+            'CSON': '#244776',
+            'CSS': '#563d7c',
+            'Ceylon': '#dfa535',
+            'Chapel': '#8dc63f',
+            'Cirru': '#ccccff',
+            'Clarion': '#db901e',
+            'Classic ASP': '#6a40fd',
+            'Clean': '#3F85AF',
+            'Click': '#E4E6F3',
+            'Clojure': '#db5855',
+            'CoffeeScript': '#244776',
+            'ColdFusion': '#ed2cd6',
+            'Common Lisp': '#3fb68b',
+            'Common Workflow Language': '#B5314C',
+            'Component Pascal': '#B0CE4E',
+            'Crystal': '#000100',
+            'Cuda': '#3A4E3A',
+            'D': '#ba595e',
+            'DM': '#447265',
+            'Dart': '#00B4AB',
+            'DataWeave': '#003a52',
+            'Dhall': '#dfafff',
+            'Dockerfile': '#384d54',
+            'Dogescript': '#cca760',
+            'Dylan': '#6c616e',
+            'E': '#ccce35',
+            'ECL': '#8a1267',
+            'EJS': '#a91e50',
+            'EQ': '#a78649',
+            'Eiffel': '#4d6977',
+            'Elixir': '#6e4a7e',
+            'Elm': '#60B5CC',
+            'Emacs Lisp': '#c065db',
+            'EmberScript': '#FFF4F3',
+            'Erlang': '#B83998',
+            'F#': '#b845fc',
+            'F*': '#572e30',
+            'FLUX': '#88ccff',
+            'Factor': '#636746',
+            'Fancy': '#7b9db4',
+            'Fantom': '#14253c',
+            'Faust': '#c37240',
+            'Forth': '#341708',
+            'Fortran': '#4d41b1',
+            'FreeMarker': '#0050b2',
+            'Frege': '#00cafe',
+            'G-code': '#D08CF2',
+            'GDScript': '#355570',
+            'GLSL': '#5686a5',
+            'GN': '#000000',
+            'Game Maker Language': '#71b417',
+            'Genie': '#fb855d',
+            'Gherkin': '#5B2063',
+            'Glyph': '#c1ac7f',
+            'Gnuplot': '#f0a9f0',
+            'Go': '#00ADD8',
+            'Golo': '#88562A',
+            'Gosu': '#82937f',
+            'Grammatical Framework': '#ff6375',
+            'Groovy': '#e69f56',
+            'HTML': '#e34c26',
+            'Hack': '#878787',
+            'Harbour': '#0e60e3',
+            'Haskell': '#5e5086',
+            'Haxe': '#df7900',
+            'HiveQL': '#dce200',
+            'HolyC': '#ffefaf',
+            'Hy': '#7790B2',
+            'IDL': '#a3522f',
+            'Idris': '#b30000',
+            'Io': '#a9188d',
+            'Ioke': '#078193',
+            'Isabelle': '#FEFE00',
+            'J': '#9EEDFF',
+            'JFlex': '#DBCA00',
+            'JSONiq': '#40d47e',
+            'JSX': '#f1e05a',
+            'Jasmin': '#d03600',
+            'Java': '#b07219',
+            'JavaScript': '#f1e05a',
+            'Jison': '#56b3cb',
+            'Jolie': '#843179',
+            'Jsonnet': '#0064bd',
+            'Julia': '#a270ba',
+            'Jupyter Notebook': '#DA5B0B',
+            'KRL': '#28430A',
+            'Kotlin': '#F18E33',
+            'LFE': '#4C3023',
+            'LOLCODE': '#cc9900',
+            'LSL': '#3d9970',
+            'LabVIEW': '#fede06',
+            'Lasso': '#999999',
+            'Lean': '#000000',
+            'Lex': '#DBCA00',
+            'LilyPond': '#9ccc7c',
+            'Limbo': '#000000',
+            'Liquid': '#67b8de',
+            'LiveScript': '#499886',
+            'Logos': '#000000',
+            'Logtalk': '#295b9a',
+            'LookML': '#652B81',
+            'Lua': '#000080',
+            'MATLAB': '#e16737',
+            'MAXScript': '#00a6a6',
+            'MLIR': '#5EC8DB',
+            'MQL4': '#62A8D6',
+            'MQL5': '#4A76B8',
+            'MTML': '#b7e1f4',
+            'Makefile': '#427819',
+            'Markdown': '#083fa1',
+            'Marko': '#42bff2',
+            'Mask': '#f97732',
+            'Max': '#c4a79c',
+            'Mercury': '#ff2b2b',
+            'Meson': '#007800',
+            'Metal': '#8f14e9',
+            'Mirah': '#c7a938',
+            'Modelica': '#000000',
+            'Modula-2': '#10253f',
+            'Modula-3': '#223388',
+            'MoonScript': '#000000',
+            'Myghty': '#000000',
+            'NASL': '#000000',
+            'NCL': '#28431f',
+            'NL': '#ff6375',
+            'NSIS': '#000000',
+            'Nearley': '#990000',
+            'Nemerle': '#3d3c6e',
+            'NetLinx': '#0aa0ff',
+            'NetLinx+ERB': '#747faa',
+            'NetLogo': '#ff6375',
+            'NewLisp': '#87AED7',
+            'Nextflow': '#3ac486',
+            'Nim': '#ffc200',
+            'Nit': '#009917',
+            'Nix': '#7e7eff',
+            'Nu': '#c9df40',
+            'NumPy': '#9C8AF9',
+            'OCaml': '#3be133',
+            'ObjectScript': '#424893',
+            'Objective-C': '#438eff',
+            'Objective-C++': '#6866fb',
+            'Objective-J': '#ff0c5a',
+            'Omgrofl': '#cabbff',
+            'Opal': '#f7ede0',
+            'OpenCL': '#000000',
+            'OpenEdge ABL': '#5ce600',
+            'OpenQASM': '#AA70FF',
+            'OpenSCAD': '#000000',
+            'Ox': '#000000',
+            'Oxygene': '#cdd0e3',
+            'Oz': '#fab738',
+            'P4': '#7055b5',
+            'PHP': '#4F5D95',
+            'PLSQL': '#dad8d8',
+            'PLpgSQL': '#000000',
+            'POV-Ray SDL': '#000000',
+            'Pan': '#cc0000',
+            'Papyrus': '#6600cc',
+            'Parrot': '#f3ca0a',
+            'Pascal': '#E3F171',
+            'Pawn': '#dbb284',
+            'Pep8': '#C76F5B',
+            'Perl': '#0298c3',
+            'Perl 6': '#0000fb',
+            'PicoLisp': '#000000',
+            'PigLatin': '#fcd7de',
+            'Pike': '#005390',
+            'PogoScript': '#d80074',
+            'PostScript': '#da291c',
+            'PowerBuilder': '#8f0f8d',
+            'PowerShell': '#012456',
+            'Processing': '#0096D8',
+            'Prolog': '#74283c',
+            'Propeller Spin': '#7fa2a7',
+            'Puppet': '#302B6D',
+            'PureBasic': '#5a6986',
+            'PureScript': '#1D222D',
+            'Python': '#3572A5',
+            'QML': '#44a51c',
+            'Qt Script': '#00b841',
+            'Quake': '#882233',
+            'R': '#198CE7',
+            'RAML': '#77d9fb',
+            'RPC': '#000000',
+            'RUNOFF': '#665a4e',
+            'Racket': '#3c5caa',
+            'Ragel': '#9d5200',
+            'Raku': '#0000fb',
+            'Rascal': '#fffaa0',
+            'ReScript': '#ed5051',
+            'Reason': '#ff5847',
+            'Rebol': '#358a5b',
+            'Red': '#f50000',
+            'Ren\'Py': '#ff7f7f',
+            'RenderScript': '#000000',
+            'Ring': '#2D54CB',
+            'Riot': '#A71E49',
+            'RobotFramework': '#000000',
+            'Roff': '#ecdebe',
+            'Rouge': '#cc0088',
+            'Ruby': '#701516',
+            'Rust': '#dea584',
+            'SAS': '#B34936',
+            'SCSS': '#c6538c',
+            'SMT': '#000000',
+            'SPARQL': '#0C4597',
+            'SQF': '#3F3F3F',
+            'SQL': '#e38c00',
+            'SQLPL': '#e38c00',
+            'SRecode Template': '#348a34',
+            'SaltStack': '#646464',
+            'Sass': '#a53b70',
+            'Scala': '#c22d40',
+            'Scheme': '#1e4aec',
+            'Self': '#0579aa',
+            'Shell': '#89e051',
+            'Shen': '#120F14',
+            'Slash': '#007eff',
+            'Slice': '#003fa2',
+            'Smalltalk': '#596706',
+            'Solidity': '#AA6746',
+            'SourcePawn': '#f69e0f',
+            'Squirrel': '#800000',
+            'Stan': '#b2011d',
+            'Standard ML': '#dc566d',
+            'Starlark': '#76d275',
+            'Stata': '#1a5f91',
+            'Stylus': '#ff6347',
+            'SuperCollider': '#46390b',
+            'Svelte': '#ff3e00',
+            'Swift': '#ffac45',
+            'SystemVerilog': '#DAE1C2',
+            'TI Program': '#A0AA87',
+            'TLA': '#4b0079',
+            'TSQL': '#e38c00',
+            'TSX': '#2b7489',
+            'Tcl': '#e4cc98',
+            'TeX': '#3D6117',
+            'Terra': '#00004c',
+            'Thrift': '#D12127',
+            'TLA+': '#000000',
+            'TypeScript': '#2b7489',
+            'Unified Parallel C': '#4e3617',
+            'Unity3D Asset': '#000000',
+            'Unix Assembly': '#000000',
+            'Uno': '#9933cc',
+            'UnrealScript': '#a54c4d',
+            'UrWeb': '#000000',
+            'V': '#4f87c4',
+            'VBA': '#867db1',
+            'VBScript': '#15dcdc',
+            'VCL': '#148AA8',
+            'VHDL': '#adb2cb',
+            'Vala': '#fbe5cd',
+            'Verilog': '#b2b7f8',
+            'Vim script': '#199f4b',
+            'Visual Basic': '#945db7',
+            'Volt': '#1F1F1F',
+            'Vue': '#2c3e50',
+            'WebAssembly': '#04133b',
+            'Wollok': '#a23738',
+            'X10': '#4B6BEF',
+            'XC': '#99DA07',
+            'XQuery': '#5232e7',
+            'XSLT': '#EB8CEB',
+            'Yacc': '#4B6C4B',
+            'YARA': '#220000',
+            'YASnippet': '#32AB90',
+            'Zephir': '#118f9e',
+            'Zig': '#ec915c',
+            'eC': '#913960',
+            'mcfunction': '#E22837',
+            'nesC': '#94B0C7',
+            'ooc': '#b0b77e',
+            'q': '#0040cd',
+            'sed': '#64b970',
+            'wdl': '#42f1f4',
+            'wisp': '#7582D1',
+            'xBase': '#403a40',
+            'default': '#8b949e'
+        };
+
+        async function fetchUserData() {
+            try {
+                const response = await fetch(`https://api.github.com/users/${USERNAME}`);
+                const data = await response.json();
+                
+                document.getElementById('avatar').src = data.avatar_url;
+                document.getElementById('avatar').classList.remove('skeleton');
+                document.getElementById('name').textContent = data.name || data.login;
+                document.getElementById('bio').textContent = data.bio || 'No bio available';
+                document.getElementById('location').textContent = data.location || 'Unknown';
+                document.getElementById('followers').textContent = `${data.followers} followers`;
+                document.getElementById('repos-count').textContent = `${data.public_repos} repositories`;
+                document.getElementById('profile-link').href = data.html_url;
+                
+                document.getElementById('public-repos').textContent = data.public_repos;
+                document.getElementById('followers-stat').textContent = data.followers;
+                
+                gsap.to('#hero-content', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: 'power3.out'
+                });
+                
+                gsap.to('#stats-grid > div', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    ease: 'power3.out'
+                });
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                document.getElementById('name').textContent = 'Error loading profile';
+                document.getElementById('bio').textContent = 'Please check the username';
+            }
+        }
+
+        async function fetchRepositories() {
+            try {
+                const response = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`);
+                allRepos = await response.json();
+                
+                let totalStars = 0;
+                let totalForks = 0;
+                
+                allRepos.forEach(repo => {
+                    totalStars += repo.stargazers_count;
+                    totalForks += repo.forks_count;
+                });
+                
+                document.getElementById('total-stars').textContent = totalStars;
+                document.getElementById('total-forks').textContent = totalForks;
+                
+                displayRepositories(allRepos);
+            } catch (error) {
+                console.error('Error fetching repositories:', error);
+            }
+        }
+
+        function displayRepositories(repos) {
+            const container = document.getElementById('repos-container');
+            container.innerHTML = '';
+            
+            if (repos.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 col-span-2 text-center py-8">No repositories found</p>';
+                return;
+            }
+            
+            repos.slice(0, 12).forEach((repo, index) => {
+                const card = document.createElement('div');
+                card.className = 'repo-card rounded-xl p-6 shadow-lg card-hover opacity-0';
+                
+                const langColor = languageColors[repo.language] || languageColors['default'];
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex-1">
+                            <i class="fas fa-book text-black mr-2"></i>${repo.name}
+                        </h3>
+                        <span class="bg-gray-100 text-black text-xs px-3 py-1 rounded-full font-semibold">
+                            ${repo.visibility || 'public'}
+                        </span>
+                    </div>
+                    <p class="text-gray-600 mb-4 line-clamp-2">${repo.description || 'No description available'}</p>
+                    <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                        ${repo.language ? `
+                            <div class="flex items-center gap-1">
+                                <span class="language-dot" style="background-color: ${langColor}"></span>
+                                <span>${repo.language}</span>
+                            </div>
+                        ` : ''}
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-500"></i>
+                            <span>${repo.stargazers_count}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-code-branch text-gray-600"></i>
+                            <span>${repo.forks_count}</span>
+                        </div>
+                    </div>
+                    <a href="${repo.html_url}" target="_blank" 
+                       class="inline-flex items-center text-black hover:text-gray-700 font-semibold">
+                        View Repository <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                `;
+                
+                container.appendChild(card);
+                
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    delay: index * 0.1,
+                    ease: 'power3.out'
+                });
+            });
+        }
+
+        function filterAndSortRepos() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const sortBy = document.getElementById('sort-select').value;
+            
+            let filtered = allRepos.filter(repo => 
+                repo.name.toLowerCase().includes(searchTerm) ||
+                (repo.description && repo.description.toLowerCase().includes(searchTerm))
+            );
+            
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'stars':
+                        return b.stargazers_count - a.stargazers_count;
+                    case 'forks':
+                        return b.forks_count - a.forks_count;
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'updated':
+                    default:
+                        return new Date(b.updated_at) - new Date(a.updated_at);
+                }
+            });
+            
+            displayRepositories(filtered);
+        }
+
+        document.getElementById('search-input').addEventListener('input', filterAndSortRepos);
+        document.getElementById('sort-select').addEventListener('change', filterAndSortRepos);
+
+        // Initialize
+        fetchUserData();
+        fetchRepositories();
+        
+        // Animate hero on load
+        gsap.from('#hero-content', {
+            y: 30,
+            duration: 1,
+            opacity: 0
+        });
+    </script>
 </body>
 </html>
